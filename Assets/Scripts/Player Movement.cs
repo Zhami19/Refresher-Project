@@ -17,18 +17,20 @@ public class PlayerMovement : MonoBehaviour
 
     // variables
     Vector3 movementVector;
-    bool isGrounded;
+    bool isGrounded = true;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        Debug.Log("isGrounded");
         rb = GetComponent<Rigidbody>();
     }
 
     private void Update()
     {
         animator.SetFloat("walkSpeed", movementVector.magnitude);
-        
+        animator.SetBool("isGrounded", isGrounded);
+
     }
 
     public void OnJump(InputAction.CallbackContext context)

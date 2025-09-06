@@ -1000,7 +1000,7 @@ MonoBehaviour:
   moveSpeed: 10
   jumpSpeed: 5
   animator: {fileID: 1677333514}
-  camera: {fileID: 2142372803}
+  theCamera: {fileID: 2142372803}
 --- !u!1 &2142372801
 GameObject:
   m_ObjectHideFlags: 0
