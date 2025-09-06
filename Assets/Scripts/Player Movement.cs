@@ -15,6 +15,7 @@ public class PlayerMovement : MonoBehaviour
 
     // variables
     Vector3 movementVector;
+    bool isGrounded;
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -29,8 +30,9 @@ public class PlayerMovement : MonoBehaviour
 
     public void OnJump(InputAction.CallbackContext context)
     {
-        if (context.performed)
+        if (context.performed && isGrounded)
         {
+            isGrounded = false;
             rb.AddForce(Vector3.up * jumpSpeed, ForceMode.Impulse);
         }
     }
@@ -43,8 +45,19 @@ public class PlayerMovement : MonoBehaviour
         animator.transform.forward = movementVector.normalized;
     }
 
+    public void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.tag == "Ground")
+        {
+            isGrounded = true;
+        }
+    }
+
     private void FixedUpdate()
     {
-        rb.AddForce(movementVector * moveSpeed, ForceMode.Acceleration);
+        if (isGrounded)
+        {
+            rb.linearVelocity = movementVector.normalized * moveSpeed;
+        }
     }
 }
