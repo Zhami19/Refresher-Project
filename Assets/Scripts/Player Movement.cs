@@ -1,6 +1,7 @@
 using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
+using UnityEngine.LightTransport;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -12,6 +13,7 @@ public class PlayerMovement : MonoBehaviour
     // references
     Rigidbody rb;
     [SerializeField] Animator animator;
+    [SerializeField] Transform theCamera;
 
     // variables
     Vector3 movementVector;
@@ -26,6 +28,7 @@ public class PlayerMovement : MonoBehaviour
     private void Update()
     {
         animator.SetFloat("walkSpeed", movementVector.magnitude);
+        
     }
 
     public void OnJump(InputAction.CallbackContext context)
@@ -40,9 +43,23 @@ public class PlayerMovement : MonoBehaviour
     public void OnMovement(InputAction.CallbackContext context)
     {
         Vector2 inputVector = context.ReadValue<Vector2>();
-        movementVector = new Vector3(inputVector.x, 0, inputVector.y);
 
-        animator.transform.forward = movementVector.normalized;
+        Vector3 cameraForward = theCamera.forward;
+        Vector3 cameraSide = theCamera.right;
+
+        cameraForward.y = 0;
+        cameraSide.y = 0;   
+
+        cameraForward.Normalize();
+        cameraSide.Normalize();
+
+        movementVector = (inputVector.x * cameraSide + inputVector.y * cameraForward);
+
+        if (movementVector != Vector3.zero)
+        {
+            Vector3 direction = movementVector.normalized;
+            transform.forward = direction;
+        }
     }
 
     public void OnCollisionEnter(Collision collision)
@@ -57,7 +74,7 @@ public class PlayerMovement : MonoBehaviour
     {
         if (isGrounded)
         {
-            rb.linearVelocity = movementVector.normalized * moveSpeed;
+            rb.linearVelocity = movementVector * moveSpeed;
         }
     }
 }
