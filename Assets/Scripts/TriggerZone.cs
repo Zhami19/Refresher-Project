@@ -1,4 +1,6 @@
+using System.Collections;
 using UnityEngine;
+using UnityEngine.Events;
 
 public class TriggerZone : MonoBehaviour
 {
@@ -27,11 +29,8 @@ public class TriggerZone : MonoBehaviour
     {
         if (doorStates == DoorStates.Opening)
         {
-            // Use current position as start
-            doorPrefab.transform.position = Vector3.MoveTowards(doorPrefab.transform.position, openedDoorPosition, doorSpeed * Time.deltaTime
-            );
+            doorPrefab.transform.position = Vector3.MoveTowards(doorPrefab.transform.position, openedDoorPosition, doorSpeed * Time.deltaTime);
 
-            // Stop moving when fully open
             if (doorPrefab.transform.position == openedDoorPosition)
             {
                 doorStates = DoorStates.Resting;
@@ -39,10 +38,8 @@ public class TriggerZone : MonoBehaviour
         }
         else if (doorStates == DoorStates.Closing)
         {
-            doorPrefab.transform.position = Vector3.MoveTowards(doorPrefab.transform.position, originalDoorPosition, doorSpeed * Time.deltaTime
-            );
+            doorPrefab.transform.position = Vector3.MoveTowards(doorPrefab.transform.position, originalDoorPosition, doorSpeed * Time.deltaTime);
 
-            // Stop moving when fully closed
             if (doorPrefab.transform.position == originalDoorPosition)
             {
                 doorStates = DoorStates.Resting;
@@ -60,7 +57,7 @@ public class TriggerZone : MonoBehaviour
 
     private void OnTriggerExit(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag("Player") || this.gameObject.name == "DoorZone")
         {
             doorStates = DoorStates.Closing;
         }

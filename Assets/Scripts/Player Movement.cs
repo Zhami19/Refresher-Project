@@ -2,6 +2,7 @@ using UnityEngine;
 using System;
 using UnityEngine.InputSystem;
 using UnityEngine.LightTransport;
+using UnityEngine.Events;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -19,11 +20,13 @@ public class PlayerMovement : MonoBehaviour
     Vector3 movementVector;
     bool isGrounded = true;
 
+    public UnityEvent OnRestore;
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
-        Debug.Log("isGrounded");
         rb = GetComponent<Rigidbody>();
+        OnRestore.Invoke();
     }
 
     private void Update()
